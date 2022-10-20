@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "dataflow_movies",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -44,8 +44,10 @@
 				"          title = toString(left(title, length(title)-6 ))) ~> derivedColumnmoviesaddingcolumn",
 				"derivedColumnmoviesaddingcolumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkmovies"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkmovies"
 			]
 		}
 	}
