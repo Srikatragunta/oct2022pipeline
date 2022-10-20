@@ -1,6 +1,7 @@
 {
 	"name": "pl_call_dataflow_customer",
 	"properties": {
+		"description": "this pipeline for to call the dataflow",
 		"activities": [
 			{
 				"name": "df_customerpurchases",
