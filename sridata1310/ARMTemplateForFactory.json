@@ -1141,11 +1141,14 @@
 						},
 						{
 							"name": "aggregatemoviesbyyear"
+						},
+						{
+							"name": "exists1"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
-						"          movieId as string,",
+						"          movieId as integer,",
 						"          title as string,",
 						"          genres as string",
 						"     ),",
@@ -1157,6 +1160,10 @@
 						"          title = toString(left(title, length(title)-6 ))) ~> derivedColumnmoviesaddingcolumn",
 						"derivedColumnmoviesaddingcolumn aggregate(groupBy(year),",
 						"     moviescount = count()) ~> aggregatemoviesbyyear",
+						"derivedColumnmoviesaddingcolumn, aggregatemoviesbyyear exists(movieId == moviescount,",
+						"     negate:false,",
+						"     partitionBy('hash', 1),",
+						"     broadcast: 'both')~> exists1",
 						"derivedColumnmoviesaddingcolumn sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     partitionFileNames:['moviesclean'],",
