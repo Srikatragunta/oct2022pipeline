@@ -1,5 +1,5 @@
 {
-	"name": "ds_movies_data_flow_source",
+	"name": "ds_movies_data_flow_sink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_storage",
@@ -13,27 +13,13 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "movies.txt",
-				"container": "oltp"
+				"container": "sink"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "movieId",
-				"type": "String"
-			},
-			{
-				"name": "title",
-				"type": "String"
-			},
-			{
-				"name": "genres",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
