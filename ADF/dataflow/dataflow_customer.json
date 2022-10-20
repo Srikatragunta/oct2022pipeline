@@ -1,0 +1,109 @@
+{
+	"name": "dataflow_customer",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_purchaseorder_dataflow",
+						"type": "DatasetReference"
+					},
+					"name": "purchaseorder"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_customer_dataflow",
+						"type": "DatasetReference"
+					},
+					"name": "customerdata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dataflow_octpurchases",
+						"type": "DatasetReference"
+					},
+					"name": "output"
+				}
+			],
+			"transformations": [
+				{
+					"name": "purchaseorderprojection"
+				},
+				{
+					"name": "customerprojection"
+				},
+				{
+					"name": "dataqualityfilters"
+				},
+				{
+					"name": "joinstream"
+				},
+				{
+					"name": "metrics"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          purchaseorder0 as string,",
+				"          customercode as string,",
+				"          productcode as string,",
+				"          employeecode as string,",
+				"          purchaseorder4 as string,",
+				"          quantity as long,",
+				"          unitprice as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> purchaseorder",
+				"source(output(",
+				"          customercode as string,",
+				"          customername as string,",
+				"          address as string,",
+				"          phonenumber as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> customerdata",
+				"purchaseorder select(mapColumn(",
+				"          customercode,",
+				"          quantity",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> purchaseorderprojection",
+				"customerdata select(mapColumn(",
+				"          customercode,",
+				"          customername",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> customerprojection",
+				"purchaseorderprojection filter(greater({customercode}, '0')) ~> dataqualityfilters",
+				"dataqualityfilters, customerprojection join(purchaseorderprojection@customercode == customerprojection@customercode,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinstream",
+				"joinstream aggregate(groupBy(customerprojection@customercode,",
+				"          customername),",
+				"     {products purchased} = sum(quantity)) ~> metrics",
+				"metrics sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          customercode as string,",
+				"          customername as string,",
+				"          productspurchased as long",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> output"
+			]
+		}
+	}
+}

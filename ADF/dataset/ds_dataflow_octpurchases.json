@@ -1,0 +1,31 @@
+{
+	"name": "ds_dataflow_octpurchases",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_targetdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "customercode",
+				"type": "varchar"
+			},
+			{
+				"name": "customername",
+				"type": "varchar"
+			},
+			{
+				"name": "productspurchased",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Octcustomerpurchases"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

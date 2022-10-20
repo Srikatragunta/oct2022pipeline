@@ -1,0 +1,53 @@
+{
+	"name": "ds_purchaseorder_dataflow",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "purchaseorder.txt",
+				"container": "oltp"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "purchaseorder0",
+				"type": "String"
+			},
+			{
+				"name": "customercode",
+				"type": "String"
+			},
+			{
+				"name": "productcode",
+				"type": "String"
+			},
+			{
+				"name": "employeecode",
+				"type": "String"
+			},
+			{
+				"name": "purchaseorder4",
+				"type": "String"
+			},
+			{
+				"name": "quantity",
+				"type": "String"
+			},
+			{
+				"name": "unitprice",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

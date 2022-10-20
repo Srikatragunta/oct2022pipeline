@@ -1,0 +1,26 @@
+{
+	"name": "ds_configuration_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_targetdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "Watermarkcolumn",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "configuration"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
